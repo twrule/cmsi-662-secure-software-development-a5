@@ -1,3 +1,30 @@
-<h1>Make a Transfer</h1>
-<p>Transfer implementation coming soon</p>
-<p><a href="/dashboard">Back to Dashboard</a></p>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-content">
+    <h1>Make a Transfer</h1>
+    <form method="POST" action="/transfer">
+        <p>
+            <label for="from">From (Email):</label>
+            <input type="email" id="from" name="from" required />
+        </p>
+        <p>
+            <label for="to">To (Email):</label>
+            <input type="email" id="to" name="to" required />
+        </p>
+        <p>
+            <label for="pokemon">Pokemon:</label>
+            <input type="text" id="pokemon" name="pokemon" required />
+        </p>
+        <p>
+            <label for="card">Card Count:</label>
+            <input type="number" id="card" name="card" required min="1" />
+        </p>
+        <p>
+            <input type="submit" value="Transfer" />
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        </p>
+    </form>
+    <p><a href="/dashboard">Back to Dashboard</a></p>
+</div>
+{% endblock %}

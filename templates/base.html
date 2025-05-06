@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pokemon Manager{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 15px 0;
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        nav {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: #333;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        main {
+            position: relative;
+            height: 100vh;
+        }
+
+        .main-content {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .main-content h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .main-content p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        hr {
+            border: 1px solid #ddd;
+            margin: 0;
+        }
+
+        form {
+            max-width: 400px;
+            /* Limit the width of the form */
+            margin: 0 auto;
+            /* Center the form on the page */
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form p {
+            margin: 10px 0;
+        }
+
+        form input[type="email"],
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="submit"] {
+            width: 100%;
+            /* Ensure input fields take up full width */
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Pokemon Manager</h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        <div class="main-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</body>
+
+</html>

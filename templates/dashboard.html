@@ -1,4 +1,15 @@
+{% extends "base.html" %}
+
+{% if alert %}
+<script>
+    alert("Transfer successful!");
+</script>
+{% endif %}
+
+{% block content %}
+
 <h1>What would you like to do today?</h1>
-<p><a href="/details?account=100">Savings account details</a></p>
-<p><a href="/details?account=998">Checking account details</a></p>
+<p><a href="/details?account=alice@example.com">Card Collection</a></p>
 <p><a href="/transfer">Transfer</a></p>
+
+{% endblock %}

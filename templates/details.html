@@ -1,3 +1,73 @@
-<h1>Details for Account {{account_number}}</h1>
-<p>Details coming soon</p>
+<head>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            justify-content: center;
+            /* centers the cards horizontally */
+            align-items: center;
+            /* centers the cards vertically */
+            min-height: 80vh;
+            /* makes sure the container is tall enough */
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 16px;
+            width: 200px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            background-color: #fdfdfd;
+            text-align: center;
+            /* centers the text inside the card */
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .card p {
+            margin: 4px 0;
+            color: #555;
+        }
+    </style>
+</head>
+
+{% extends "base.html" %}
+{% block content %}
+
+<p>Hi, {{ user }}</p>
+
+<h1>Your Cards</h1>
+
+{% if pokemons is none %}
+<span style="color:red">Account not found</span>
+{% else %}
+<div class="card-container">
+    {% for pokemon in pokemons %}
+    <div class="card">
+        <p><strong>Count:</strong> {{ pokemon.card_count }}</p>
+        <h3>{{ pokemon.name }}</h3>
+        <p><strong>Type:</strong> {{ pokemon.type }}</p>
+        <p><strong>HP:</strong> {{ pokemon.hp }}</p>
+        <p><strong>Rarity:</strong> {{ pokemon.rarity }}</p>
+    </div>
+    <script>
+        console.log({
+            name: "{{ pokemon }}",
+
+        });
+    </script>
+    {% endfor %}
+</div>
+{% endif %}
+
 <p><a href="/dashboard">Back to Dashboard</a></p>
+{% endblock %}

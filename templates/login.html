@@ -70,8 +70,8 @@
 </head>
 
 {% if error %}
-{#<!-- Dynamic content below is escaped via Jinja2's {{ }} syntax to prevent XSS. -->#}
-{#<!-- This ensures that any user input is safely displayed without executing any scripts. -->#}
+{# Dynamic content below is escaped via Jinja2's {{ }} syntax to prevent XSS. #}
+{# This ensures that any user input is safely displayed without executing any scripts. #}
 <p class="error">{{ error }}</p>
 {% endif %}
 <header>
@@ -81,8 +81,8 @@
   <p>Email: <input type="text" name="email" /></p>
   <p>Password: <input type="password" name="password" /></p>
   <p><input type="submit" value="Login" /></p>
-  {#<!-- This hidden CSRF token is included to protect against cross-site request forgery attacks (csrf). -->#}
-    {#<!-- It ensures that form submissions are secure and originate from the intended user. -->#}
-      {#<!-- The token is generated on the server side and validated upon form submission. -->#}
+  {# This hidden CSRF token is included to protect against cross-site request forgery attacks (csrf). #}
+  {# It ensures that form submissions are secure and originate from the intended user. #}
+  {# The token is generated on the server side and validated upon form submission. #}
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 </form>

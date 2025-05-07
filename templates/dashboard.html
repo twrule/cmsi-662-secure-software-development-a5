@@ -15,6 +15,7 @@
 </head>
 
 {% block content %}
+{# Us the following to display a secure, tamper-proof flash message confirming success of transfer.#}
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class="flash-messages">

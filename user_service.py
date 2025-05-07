@@ -15,7 +15,8 @@ def get_user_with_credentials_safe(email, password):
             SELECT email, name, password FROM users where email=?''',
                     (email,))
         row = cur.fetchone()
-        # Always perform a hash verification to prevent timing attacks
+        # Initial Hash verification to prevent user_enumeration
+        # If the user does not exist, we still hash a dummy password
         if row is None:
             pbkdf2_sha256.verify(
                 password, pbkdf2_sha256.hash('dummy_password'))
@@ -31,6 +32,7 @@ def get_user_with_credentials_safe(email, password):
 def logged_in():
     token = request.cookies.get('auth_token')
     try:
+        
         data = jwt.decode(token, SECRET, algorithms=['HS256'])
         g.user = data['sub']
         return True

@@ -22,9 +22,9 @@
         </p>
         <p>
             <input type="submit" value="Transfer" />
-            {#<!-- This hidden CSRF token is included to protect against cross-site request forgery attacks (csrf). -->#}
-            {#<!-- It ensures that form submissions are secure and originate from the intended user. -->#}
-            {#<!-- The token is generated on the server side and validated upon form submission. -->#}
+            {# This hidden CSRF token is included to protect against cross-site request forgery attacks (csrf). #}
+            {# It ensures that form submissions are secure and originate from the intended user. #}
+            {# The token is generated on the server side and validated upon form submission. #}
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         </p>
     </form>

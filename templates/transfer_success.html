@@ -25,12 +25,12 @@
   }
 </style>
 
-<div class="success-animation">Transferring {{ count }} {{ pokemon }} card(s) to {{ target }}...</div>
+<div class="success-animation">Transferring Count:{{ count }} of Pokemon with ID: {{ pokemon }} card(s) to {{ target }}...</div>
 <div class="card-fly">✨🃏✨</div>
 
 <script>
   setTimeout(() => {
-    window.location.href = "/dashboard?alert=True";
+    window.location.href = "/dashboard";
   }, 2500); // 2.5 second delay before redirect
 </script>
 {% endblock %}

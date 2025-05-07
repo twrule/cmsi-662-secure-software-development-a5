@@ -1,14 +1,14 @@
 from flask_wtf.csrf import CSRFProtect
 from flask import (
     Flask, request, make_response,
-    redirect, render_template, g, abort)
+    redirect, render_template, g, abort, flash)
 from user_service import get_user_with_credentials_safe, logged_in
 from card_service import get_card_count, do_transfer, get_pokemon_by_owner, get_pokemon
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'e783eeb139649d3fabc370700eeca1511297438ee89265410b282b05292df010'
-csrf = CSRFProtect(app)
+csrf = CSRFProtect(app)  # Enables CSRF protection for all form POSTs
 
 
 @app.route("/", methods=['GET'])
@@ -22,10 +22,20 @@ def home():
 def login():
     email = request.form.get("email")
     password = request.form.get("password")
+    # Prevent user enumeration by returning the same message regardless of cause
+    # of failure
+    # This is a common security practice to prevent attackers from guessing
+    # valid usernames or emails.
+    # If the email is not found, or the password is incorrect, we return the same
+    # error message.
+    # This way, an attacker cannot determine if the email exists in the system
+    # based on the error message.
     user = get_user_with_credentials_safe(email, password)
     if not user:
+        # Error message is intentionally vague (user not found vs bad password)
         return render_template("login.html", error="Invalid credentials")
     response = make_response(redirect("/dashboard"))
+    # Store authentication securely in cookie; ensure cookie flags set elsewhere (e.g., Secure, HttpOnly)
     response.set_cookie("auth_token", user["token"])
     return response, 303
 
@@ -34,6 +44,7 @@ def login():
 def dashboard():
     if not logged_in():
         return render_template("login.html")
+    # Alert used for display only; Jinja2 auto-escapes to prevent XSS
     alert = request.args['alert'] if 'alert' in request.args else False
     return render_template("dashboard.html", email=g.user, alert=alert)
 
@@ -85,7 +96,15 @@ def transfer():
         abort(400, "You don't have that much")
 
     if do_transfer(source, target, card_count, pokemon):
-        return render_template("transfer_success.html", pokemon=pokemon, count=card_count, target=target)
+        flash(
+            f"Successfully transferred {card_count} card(s) of type Pokemon with ID: {pokemon} to {target}!")
+
+        return render_template(
+            "transfer_success.html",
+            count=card_count,
+            pokemon=pokemon,
+            target=target
+        )
     else:
         abort(400, "Something bad happened")
 

@@ -1,12 +1,30 @@
 {% extends "base.html" %}
 
-{% if alert %}
-<script>
-    alert("Transfer successful!");
-</script>
-{% endif %}
+<head>
+    <style>
+        .flash-messages {
+          list-style: none;
+          padding: 10px;
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+          border-radius: 5px;
+          margin-bottom: 20px;
+        }
+    </style>
+</head>
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 
 <h1>What would you like to do today?</h1>
 <p><a href="/details">Card Collection</a></p>

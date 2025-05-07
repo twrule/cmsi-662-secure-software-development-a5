@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .success-animation {
+    font-size: 24px;
+    margin-bottom: 20px;
+    animation: bounce 1s infinite alternate;
+    color: #4CAF50;
+  }
+
+  .card-fly {
+    display: inline-block;
+    font-size: 40px;
+    animation: flyaway 2s forwards;
+  }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
+
+  @keyframes flyaway {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-200px) rotate(720deg); opacity: 0; }
+  }
+</style>
+
+<div class="success-animation">Transferring {{ count }} {{ pokemon }} card(s) to {{ target }}...</div>
+<div class="card-fly">✨🃏✨</div>
+
+<script>
+  setTimeout(() => {
+    window.location.href = "/dashboard?alert=True";
+  }, 2500); // 2.5 second delay before redirect
+</script>
+{% endblock %}

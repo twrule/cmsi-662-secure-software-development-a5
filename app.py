@@ -42,11 +42,10 @@ def dashboard():
 def details():
     if not logged_in():
         return render_template("login.html")
-    account_number = request.args['account']
-    pokemon_owned = get_pokemon_by_owner(account_number)
+    pokemon_owned = get_pokemon_by_owner(g.user)
     return render_template(
         "details.html",
-        user=g.user,
+        email=g.user,
         pokemons=get_pokemon(pokemon_owned))
 
 
@@ -85,15 +84,10 @@ def transfer():
     if card_count > available_balance:
         abort(400, "You don't have that much")
 
-    alert = False
-
     if do_transfer(source, target, card_count, pokemon):
-        alert = True
+        return render_template("transfer_success.html", pokemon=pokemon, count=card_count, target=target)
     else:
         abort(400, "Something bad happened")
-
-    response = make_response(redirect("/dashboard?alert=" + str(alert)))
-    return response, 303
 
 
 @app.route("/logout", methods=['GET'])

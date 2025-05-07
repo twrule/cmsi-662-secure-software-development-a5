@@ -2,6 +2,7 @@ import sqlite3
 
 con = sqlite3.connect('bank.db')
 cur = con.cursor()
+cur.execute('DROP TABLE IF EXISTS user_cards')
 cur.execute('''
     CREATE TABLE user_cards (
         owner text, card_id integer, card_count integer,

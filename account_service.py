@@ -21,7 +21,7 @@ def get_pokemon_by_owner(owner):
         con = sqlite3.connect('bank.db')
         cur = con.cursor()
         cur.execute('''
-            SELECT card_id, card_count FROM user_cards WHERE owner=?''',
+            SELECT card_id, card_count FROM user_cards WHERE owner=? AND card_count > 0''',
                     (owner,))
         rows = cur.fetchall()
         return rows

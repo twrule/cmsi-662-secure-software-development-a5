@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def get_balance(owner, card):
+def get_card_count(owner, card):
     try:
         con = sqlite3.connect('bank.db')
         cur = con.cursor()

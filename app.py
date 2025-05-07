@@ -3,7 +3,7 @@ from flask import (
     Flask, request, make_response,
     redirect, render_template, g, abort)
 from user_service import get_user_with_credentials_safe, logged_in
-from account_service import get_balance, do_transfer, get_pokemon_by_owner, get_pokemon
+from card_service import get_card_count, do_transfer, get_pokemon_by_owner, get_pokemon
 
 app = Flask(__name__)
 
@@ -78,10 +78,10 @@ def transfer():
     if card_count > 10:
         abort(400, "WOAH THERE TAKE IT EASY")
 
-    available_balance = get_balance(g.user, pokemon)
-    if available_balance is None:
+    card_balance = get_card_count(g.user, pokemon)
+    if card_balance is None:
         abort(404, "Account not found")
-    if card_count > available_balance:
+    if card_count > card_balance:
         abort(400, "You don't have that much")
 
     if do_transfer(source, target, card_count, pokemon):

@@ -1,20 +1,23 @@
+import os
 from flask_wtf.csrf import CSRFProtect
 from flask import (
     Flask, request, make_response,
     redirect, render_template, g, abort, flash)
-from user_service import get_user_with_credentials_safe, logged_in
+from dotenv import load_dotenv
+from user_service import get_user_with_credentials_safe, login_required
 from card_service import get_card_count, do_transfer, get_pokemon_by_owner, get_pokemon
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'e783eeb139649d3fabc370700eeca1511297438ee89265410b282b05292df010'
+load_dotenv()  # Load environment variables from .env file
+SECRET = os.getenv('SECRET_KEY')
+app.config['SECRET_KEY'] = SECRET
 csrf = CSRFProtect(app)  # Enables CSRF protection for all form POSTs
 
 
 @app.route("/", methods=['GET'])
+@login_required
 def home():
-    if not logged_in():
-        return render_template("login.html")
     return redirect('/dashboard')
 
 
@@ -35,24 +38,23 @@ def login():
         # Error message is intentionally vague (user not found vs bad password)
         return render_template("login.html", error="Invalid credentials")
     response = make_response(redirect("/dashboard"))
-    # Store authentication securely in cookie; ensure cookie flags set elsewhere (e.g., Secure, HttpOnly)
+    # Store authentication securely in cookie; ensure cookie flags set elsewhere
+    # (e.g., Secure, HttpOnly)
     response.set_cookie("auth_token", user["token"])
     return response, 303
 
 
 @app.route("/dashboard", methods=['GET'])
+@login_required
 def dashboard():
-    if not logged_in():
-        return render_template("login.html")
     # Alert used for display only; Jinja2 auto-escapes to prevent XSS
     alert = request.args['alert'] if 'alert' in request.args else False
     return render_template("dashboard.html", email=g.user, alert=alert)
 
 
 @app.route("/details", methods=['GET'])
+@login_required
 def details():
-    if not logged_in():
-        return render_template("login.html")
     pokemon_owned = get_pokemon_by_owner(g.user)
     return render_template(
         "details.html",
@@ -61,10 +63,8 @@ def details():
 
 
 @app.route("/transfer", methods=["GET", "POST"])
+@login_required
 def transfer():
-    if not logged_in():
-        return render_template("login.html")
-
     if request.method == "GET":
         return render_template("transfer.html", user=g.user)
 
@@ -97,7 +97,8 @@ def transfer():
 
     if do_transfer(source, target, card_count, pokemon):
         flash(
-            f"Successfully transferred {card_count} card(s) of type Pokemon with ID: {pokemon} to {target}!")
+            f"Successfully transferred {card_count} card(s) of type Pokemon!")
+        flash(f"Pokemon ID: {pokemon} transferred to {target}!")
 
         return render_template(
             "transfer_success.html",

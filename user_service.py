@@ -1,10 +1,24 @@
+import os
 import sqlite3
 import datetime
+from functools import wraps
+from flask import request, g, render_template
 from passlib.hash import pbkdf2_sha256
-from flask import request, g
 import jwt
+from dotenv import load_dotenv
 
-SECRET = 'bfg28y7efg238re7r6t32gfo23vfy7237yibdyo238do2v3'
+load_dotenv()
+# Load environment variables from .env file
+SECRET = os.getenv('SECRET')
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not logged_in():
+            return render_template('login.html')
+        return func(*args, **kwargs)
+    return wrapper
 
 
 def get_user_with_credentials_safe(email, password):
@@ -32,7 +46,7 @@ def get_user_with_credentials_safe(email, password):
 def logged_in():
     token = request.cookies.get('auth_token')
     try:
-        
+
         data = jwt.decode(token, SECRET, algorithms=['HS256'])
         g.user = data['sub']
         return True
